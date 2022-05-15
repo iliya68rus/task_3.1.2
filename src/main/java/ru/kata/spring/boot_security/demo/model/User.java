@@ -32,23 +32,19 @@ public class User implements UserDetails {
     @Column(name = "age")
     private Byte age;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Role> rolesList;
 
+    public User(String userName, String password, String name, String lastName, Byte age, List<Role> rolesList) {
+        this.userName = userName;
+        this.password = password;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.rolesList = rolesList;
+    }
+
     public User() {
-    }
-
-    public User(Long id, String name, String lastName, Byte age) {
-        this.id = id;
-        this.name = name;
-        this.lastName = lastName;
-        this.age = age;
-    }
-
-    public User(String name, String lastName, Byte age) {
-        this.name = name;
-        this.lastName = lastName;
-        this.age = age;
     }
 
     public Long getId() {
@@ -87,6 +83,22 @@ public class User implements UserDetails {
         return rolesList;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRolesList(List<Role> rolesList) {
+        this.rolesList = rolesList;
+    }
+
     public String getRoleName() {
         List<Role> list = getRolesList();
         for (Role role: list) {
@@ -97,7 +109,8 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRolesList().stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
+        return rolesList;
+//        return getRolesList().stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
 
     @Override
