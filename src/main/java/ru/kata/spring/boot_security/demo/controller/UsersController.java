@@ -25,7 +25,6 @@ public class UsersController {
     @GetMapping("/user")
     public String showUsers(Model model, Principal principal) {
         User user = userService.getUserByUsername(principal.getName());
-//        System.out.println("Имя: " + principal.getName());
         model.addAttribute("user", user);
         return "users/show";
     }
